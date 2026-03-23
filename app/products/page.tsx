@@ -1,4 +1,6 @@
 import ProductGrid from "@/app/ui/products/grid";
+import products from "@/data/products.json";
+console.log(products);
 
 // async function getProducts() {
 //   const res = await fetch("https://your-api.com/products", {
@@ -30,7 +32,7 @@ export default async function ProductsPage() {
 
       {/* Product Grid (Client Component) */}
       <div className="mt-12 max-w-6xl mx-auto">
-        <ProductGrid initialProducts={products} />
+        <ProductGrid initialProducts={products || []} />
       </div>
     </main>
   );
