@@ -1,0 +1,99 @@
+"use client";
+
+import { useState, useMemo } from "react";
+import Link from "next/link";
+
+type Product = {
+  id: string;
+  name: string;
+  price: number;
+  image: string;
+  category?: string;
+};
+
+export default function ProductGrid({ initialProducts }: { initialProducts: Product[] }) {
+  const [search, setSearch] = useState("");
+  const [sort, setSort] = useState("default");
+
+  const filteredProducts = useMemo(() => {
+    let filtered = initialProducts.filter((product) =>
+      product.name.toLowerCase().includes(search.toLowerCase())
+    );
+
+    switch (sort) {
+      case "price-low":
+        return [...filtered].sort((a, b) => a.price - b.price);
+      case "price-high":
+        return [...filtered].sort((a, b) => b.price - a.price);
+      case "name":
+        return [...filtered].sort((a, b) =>
+          a.name.localeCompare(b.name)
+        );
+      default:
+        return filtered;
+    }
+  }, [search, sort, initialProducts]);
+
+  return (
+    <>
+      {/* Controls */}
+      <div className="flex flex-col md:flex-row gap-4 justify-between mb-8">
+        
+        {/* Search */}
+        <input
+          type="text"
+          placeholder="Search products..."
+          className="w-full md:w-1/2 rounded-full border border-[#d6c6b8] px-5 py-3 bg-white focus:outline-none focus:ring-2 focus:ring-[#7a5c46]"
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+        />
+
+        {/* Sort */}
+        <select
+          className="rounded-full border border-[#d6c6b8] px-5 py-3 bg-white focus:outline-none"
+          value={sort}
+          onChange={(e) => setSort(e.target.value)}
+        >
+          <option value="default">Sort By</option>
+          <option value="price-low">Price: Low → High</option>
+          <option value="price-high">Price: High → Low</option>
+          <option value="name">Name (A-Z)</option>
+        </select>
+      </div>
+
+      {/* Grid */}
+      <div className="grid gap-8 sm:grid-cols-2 md:grid-cols-3">
+        {filteredProducts.map((product) => (
+          <Link key={product.id} href={`/products/${product.id}`}>
+            <div className="rounded-2xl bg-white shadow-md overflow-hidden hover:shadow-lg transition cursor-pointer">
+              
+              <img
+                src={product.image}
+                alt={product.name}
+                className="h-64 w-full object-cover"
+              />
+
+              <div className="p-5">
+                <h3 className="text-xl font-semibold">
+                  {product.name}
+                </h3>
+
+                <p className="mt-2 text-[#8b6f5a] font-medium">
+                  ${product.price.toFixed(2)}
+                </p>
+              </div>
+
+            </div>
+          </Link>
+        ))}
+      </div>
+
+      {/* Empty State */}
+      {filteredProducts.length === 0 && (
+        <p className="text-center mt-12 text-[#8b6f5a]">
+          No products found.
+        </p>
+      )}
+    </>
+  );
+}
