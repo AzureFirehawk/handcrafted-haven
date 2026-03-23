@@ -1,0 +1,44 @@
+[
+  {
+    "id": "1",
+    "name": "Rustic Wooden Candle Holder",
+    "price": 24.99,
+    "category": "Home Décor",
+    "image": "https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&w=800&q=80"
+  },
+  {
+    "id": "2",
+    "name": "Hand-Painted Ceramic Mug",
+    "price": 18.50,
+    "category": "Handmade Gifts",
+    "image": "https://images.unsplash.com/photo-1523986371872-9d3ba2e2f4e5?auto=format&fit=crop&w=800&q=80"
+  },
+  {
+    "id": "3",
+    "name": "Woven Wall Hanging",
+    "price": 45.00,
+    "category": "Home Décor",
+    "image": "https://images.unsplash.com/photo-1598300054915-d7b31b1b5642?auto=format&fit=crop&w=800&q=80"
+  },
+  {
+    "id": "4",
+    "name": "Scented Soy Candle Set",
+    "price": 32.75,
+    "category": "Handmade Gifts",
+    "image": "https://images.unsplash.com/photo-1587502536263-2c9a0f4b48d0?auto=format&fit=crop&w=800&q=80"
+  },
+  {
+    "id": "5",
+    "name": "Seasonal Felt Garland",
+    "price": 15.99,
+    "category": "Seasonal Creations",
+    "image": "https://images.unsplash.com/photo-1600880292089-90e6e0f1d4e7?auto=format&fit=crop&w=800&q=80"
+  },
+  {
+    "id": "6",
+    "name": "Handcrafted Wooden Jewelry Box",
+    "price": 60.00,
+    "category": "Home Décor",
+    "image": "https://images.unsplash.com/photo-1560185127-7a223b2b8f3e?auto=format&fit=crop&w=800&q=80"
+  }
+]
