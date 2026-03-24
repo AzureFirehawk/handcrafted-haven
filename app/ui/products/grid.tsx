@@ -64,10 +64,10 @@ export default function ProductGrid({
       </div>
 
       {/* Grid */}
-      <div className="grid gap-8 sm:grid-cols-2 md:grid-cols-3">
+      <div className="grid gap-8 sm:grid-cols-2 md:grid-cols-3 auto-rows-fr">
         {filteredProducts.map((product) => (
           <Link key={product.id} href={`/products/${product.id}`}>
-            <div className="rounded-2xl bg-white shadow-md overflow-hidden hover:shadow-lg transition cursor-pointer">
+            <div className="rounded-2xl bg-white shadow-md overflow-hidden hover:shadow-lg transition cursor-pointer flex flex-col h-full">
               
               <img
                 src={product.image}
