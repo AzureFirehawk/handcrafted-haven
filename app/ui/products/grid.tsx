@@ -11,27 +11,29 @@ type Product = {
   category?: string;
 };
 
-export default function ProductGrid({ initialProducts }: { initialProducts: Product[] }) {
+export default function ProductGrid({
+  initialProducts = [],
+}: { initialProducts?: Product[] }) {
   const [search, setSearch] = useState("");
   const [sort, setSort] = useState("default");
 
   const filteredProducts = useMemo(() => {
-    let filtered = initialProducts.filter((product) =>
-      product.name.toLowerCase().includes(search.toLowerCase())
-    );
-
-    switch (sort) {
-      case "price-low":
-        return [...filtered].sort((a, b) => a.price - b.price);
-      case "price-high":
-        return [...filtered].sort((a, b) => b.price - a.price);
-      case "name":
-        return [...filtered].sort((a, b) =>
-          a.name.localeCompare(b.name)
-        );
-      default:
-        return filtered;
-    }
+    return initialProducts
+      .filter((product) =>
+        product.name.toLowerCase().includes(search.toLowerCase())
+      )
+      .sort((a, b) => {
+        switch (sort) {
+          case "price-low":
+            return a.price - b.price;
+          case "price-high":
+            return b.price - a.price;
+          case "name":
+            return a.name.localeCompare(b.name);
+          default:
+            return 0;
+        }
+      });
   }, [search, sort, initialProducts]);
 
   return (
@@ -62,10 +64,10 @@ export default function ProductGrid({ initialProducts }: { initialProducts: Prod
       </div>
 
       {/* Grid */}
-      <div className="grid gap-8 sm:grid-cols-2 md:grid-cols-3">
+      <div className="grid gap-8 sm:grid-cols-2 md:grid-cols-3 auto-rows-fr">
         {filteredProducts.map((product) => (
           <Link key={product.id} href={`/products/${product.id}`}>
-            <div className="rounded-2xl bg-white shadow-md overflow-hidden hover:shadow-lg transition cursor-pointer">
+            <div className="rounded-2xl bg-white shadow-md overflow-hidden hover:shadow-lg transition cursor-pointer flex flex-col h-full">
               
               <img
                 src={product.image}
