@@ -10,7 +10,7 @@ export default function LoginPage() {
         <div className="flex h-20 w-full items-end rounded-t-2xl bg-[#7a5c46] p-3 md:h-36">
           <div className="w-full text-white text-center pb-4">
             <Link href="/" className="text-2xl font-bold tracking-tight">
-              Handcrafted <span className="font-light italic text-[#eadfd3]">Heaven</span>
+              Handcrafted <span className="font-light italic text-[#eadfd3]">Haven</span>
             </Link>
           </div>
         </div>

@@ -9,7 +9,7 @@ export default function WhyChooseUs() {
           Crafted with meaning, designed for everyday beauty
 </h2>
 <p className="mx-auto mt-4 max-w-3xl text-lg text-stone-600">
-          Every piece in Handcrafted Heaven is selected to bring warmth, charm,
+          Every piece in Handcrafted Haven is selected to bring warmth, charm,
           and timeless design into your space.
 </p>
 </div>
