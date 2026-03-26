@@ -1,23 +1,11 @@
-import products from "@/data/products.json";
 import Link from "next/link";
+import { fetchProductById } from "@/app/lib/data";
 
-type Product = {
-  id: string;
-  name: string;
-  price: number;
-  image: string;
-  category?: string;
-  description?: string;
-};
 
-export default async function ProductPage({
-  params,
-}: {
-  params: Promise<{ id: string }>;
-}) {
+export default async function ProductPage({ params }: any) {
   const { id } = await params;
 
-  const product = products.find((p: Product) => p.id === id);
+  const product = await fetchProductById(id);
 
   if (!product) {
     return (

@@ -2,18 +2,11 @@
 
 import { useState, useMemo } from "react";
 import Link from "next/link";
-
-type Product = {
-  id: string;
-  name: string;
-  price: number;
-  image: string;
-  category?: string;
-};
+import { ProductWithSeller } from "@/app/lib/definitions";
 
 export default function ProductGrid({
   initialProducts = [],
-}: { initialProducts?: Product[] }) {
+}: { initialProducts?: ProductWithSeller[] }) {
   const [search, setSearch] = useState("");
   const [sort, setSort] = useState("default");
 

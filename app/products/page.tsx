@@ -1,21 +1,9 @@
+import { fetchProducts } from "@/app/lib/data";
 import ProductGrid from "@/app/ui/products/grid";
-import products from "@/data/products.json";
-console.log(products);
 
-// async function getProducts() {
-//   const res = await fetch("https://your-api.com/products", {
-//     cache: "no-store", // or 'force-cache' depending on your needs
-//   });
-
-//   if (!res.ok) {
-//     throw new Error("Failed to fetch products");
-//   }
-
-//   return res.json();
-// }
 
 export default async function ProductsPage() {
-  // const products = await getProducts();
+  const products = await fetchProducts();
 
   return (
     <main className="min-h-screen bg-[#f8f3ee] text-[#3e2f25] px-6 py-16 md:px-16">
@@ -36,4 +24,4 @@ export default async function ProductsPage() {
       </div>
     </main>
   );
-}
+};
