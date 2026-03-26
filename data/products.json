@@ -4,8 +4,11 @@
     "name": "Rustic Wooden Candle Holder",
     "price": 24.99,
     "category": "Home Décor",
-    "image": null,
-    "images": [null],
+    "image": "https://images.unsplash.com/photo-1602524813704-5c4c84c7c6b0?auto=format&fit=crop&w=800&q=80",
+    "images": [
+      "https://images.unsplash.com/photo-1602524813704-5c4c84c7c6b0?auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1602874801006-7d7d4f7a4c92?auto=format&fit=crop&w=800&q=80"
+    ],
     "description": "Hand-carved from reclaimed wood, this candle holder adds a warm rustic charm to any space.",
     "seller": {
       "name": "Oak & Ember Co.",
@@ -17,8 +20,11 @@
     "name": "Hand-Painted Ceramic Mug",
     "price": 18.5,
     "category": "Handmade Gifts",
-    "image": null,
-    "images": [null],
+    "image": "https://images.unsplash.com/photo-1514228742587-6b1558fcf93a?auto=format&fit=crop&w=800&q=80",
+    "images": [
+      "https://images.unsplash.com/photo-1514228742587-6b1558fcf93a?auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1509042239860-f550ce710b93?auto=format&fit=crop&w=800&q=80"
+    ],
     "description": "Each mug is individually hand-painted, making every piece one-of-a-kind.",
     "seller": {
       "name": "Clay & Color Studio",
@@ -30,8 +36,11 @@
     "name": "Woven Wall Hanging",
     "price": 45.0,
     "category": "Home Décor",
-    "image": null,
-    "images": [null],
+    "image": "https://images.unsplash.com/photo-1598300042247-d088f8ab3a91?auto=format&fit=crop&w=800&q=80",
+    "images": [
+      "https://images.unsplash.com/photo-1598300042247-d088f8ab3a91?auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1519710164239-da123dc03ef4?auto=format&fit=crop&w=800&q=80"
+    ],
     "description": "A beautifully woven textile piece designed to bring texture and warmth to your walls.",
     "seller": {
       "name": "Thread & Loom",
@@ -43,8 +52,11 @@
     "name": "Scented Soy Candle Set",
     "price": 32.75,
     "category": "Handmade Gifts",
-    "image": null,
-    "images": [null],
+    "image": "https://images.unsplash.com/photo-1602874800894-4b4d9a8b6c3e?auto=format&fit=crop&w=800&q=80",
+    "images": [
+      "https://images.unsplash.com/photo-1602874800894-4b4d9a8b6c3e?auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1519681393784-d120267933ba?auto=format&fit=crop&w=800&q=80"
+    ],
     "description": "A set of natural soy candles with calming scents perfect for any season.",
     "seller": {
       "name": "Golden Wick",
@@ -56,8 +68,11 @@
     "name": "Seasonal Felt Garland",
     "price": 15.99,
     "category": "Seasonal Creations",
-    "image": null,
-    "images": [null],
+    "image": "https://images.unsplash.com/photo-1542838132-92c53300491e?auto=format&fit=crop&w=800&q=80",
+    "images": [
+      "https://images.unsplash.com/photo-1542838132-92c53300491e?auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1513519245088-0e12902e5a38?auto=format&fit=crop&w=800&q=80"
+    ],
     "description": "A festive handmade garland to brighten your home throughout the seasons.",
     "seller": {
       "name": "Cozy Corner Crafts",
@@ -69,8 +84,11 @@
     "name": "Handcrafted Wooden Jewelry Box",
     "price": 60.0,
     "category": "Home Décor",
-    "image": null,
-    "images": [null],
+    "image": "https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?auto=format&fit=crop&w=800&q=80",
+    "images": [
+      "https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1588449668365-d15e397f6787?auto=format&fit=crop&w=800&q=80"
+    ],
     "description": "A beautifully crafted wooden jewelry box with intricate detailing.",
     "seller": {
       "name": "Timber & Trinkets",
