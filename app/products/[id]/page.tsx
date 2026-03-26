@@ -15,7 +15,7 @@ export default async function ProductPage({
 }: {
   params: Promise<{ id: string }>;
 }) {
-  const { id } = await params; // ✅ unwrap params
+  const { id } = await params;
 
   const product = products.find((p: Product) => p.id === id);
 

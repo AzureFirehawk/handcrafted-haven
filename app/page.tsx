@@ -6,39 +6,7 @@ export default async function HomePage() {
 
   return (
     <main className="min-h-screen bg-[#f8f3ee] text-[#3e2f25]">
-      {/* Nav bar / Usser */}
-      <nav className="flex justify-between items-center px-6 py-4 bg-white shadow-sm md:px-16">
-        <div className="text-xl font-bold text-[#7a5c46]">
-          Handcrafted <span className="font-light italic text-[#8b6f5a]">Heaven</span>
-        </div>
-        
-        <div className="flex items-center gap-4">
-          {session ? (
-            <div className="flex items-center gap-4">
-              <span className="hidden md:block text-sm text-[#8b6f5a]">
-                Artisan: {session.user?.email}
-              </span>
-              <form
-                action={async () => {
-                  'use server';
-                  await signOut({ redirectTo: '/' });
-                }}
-              >
-                <button className="rounded-full border border-[#7a5c46] px-5 py-1.5 text-sm font-medium hover:bg-[#7a5c46] hover:text-white transition">
-                  Log Out
-                </button>
-              </form>
-            </div>
-          ) : (
-            <Link
-              href="/login"
-              className="rounded-full bg-[#7a5c46] px-6 py-2 text-sm font-medium text-white hover:bg-[#624836] transition"
-            >
-              Log In
-            </Link>
-          )}
-        </div>
-      </nav>
+     
       {/* Hero Section */}
 <section className="bg-[#eadfd3] px-6 py-20 md:px-16">
 <div className="mx-auto max-w-6xl grid gap-10 md:grid-cols-2 items-center">
