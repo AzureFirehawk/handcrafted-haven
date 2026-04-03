@@ -3,7 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "@/app/globals.css";
 import SiteHeader from "@/app/ui/header";
 import SiteFooter from "@/app/ui/footer";
-
+import Link from "next/link";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -32,6 +32,19 @@ export default function RootLayout({
     >
       <body className="min-h-full flex flex-col">
         <SiteHeader />
+        
+        {/* Added Our Sellers Link - Clean Version */}
+        <nav className="bg-white border-b py-3 hidden md:block">
+          <div className="max-w-6xl mx-auto px-6 flex justify-center gap-8 text-sm font-medium">
+            <Link href="/" className="hover:text-[#8B5A2B] transition">Home</Link>
+            <Link href="/shop" className="hover:text-[#8B5A2B] transition">Shop</Link>
+            <Link href="/categories" className="hover:text-[#8B5A2B] transition">Categories</Link>
+            <Link href="/seller/1" className="hover:text-[#8B5A2B] transition font-semibold">Our Sellers</Link>
+            <Link href="/about" className="hover:text-[#8B5A2B] transition">About</Link>
+            <Link href="/contact" className="hover:text-[#8B5A2B] transition">Contact</Link>
+          </div>
+        </nav>
+
         {children}
         <SiteFooter />
       </body>
