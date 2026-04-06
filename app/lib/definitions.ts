@@ -9,10 +9,23 @@ export type User = {
 export type Seller = {
   id: string;
   name: string;
+  avatar: string;
   email: string;
   bio: string | null;
   created_at: string;
+  location: string;
+  joined: string;
+  productsCount: number;
+  rating: number;
+  products: SellerProduct[];
 };
+
+export interface SellerProduct {
+  id: number;
+  name: string;
+  price: number;
+  image: string;
+}
 
 export type Product = {
   id: string;
