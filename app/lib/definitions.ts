@@ -14,17 +14,26 @@ export type Seller = {
   bio: string | null;
   created_at: string;
   location: string;
+};
+
+export type SellerProfile = {
+  id: string;
+  name: string;
+  email: string;
+  avatar: string | null;
+  bio: string | null;
+  location: string | null;
   joined: string;
   productsCount: number;
   rating: number;
   products: SellerProduct[];
 };
 
-export interface SellerProduct {
-  id: number;
+export type SellerProduct = {
+  id: string;
   name: string;
   price: number;
-  image: string;
+  image: string | null;
 }
 
 export type Product = {
