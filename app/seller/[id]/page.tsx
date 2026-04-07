@@ -1,5 +1,7 @@
 import { notFound } from 'next/navigation';
 import Image from 'next/image';
+import { fetchSellerProfile } from '@/app/lib/data';
+import { SellerProfile } from '@/app/lib/definitions';
 
 interface SellerProduct {
   id: number;
