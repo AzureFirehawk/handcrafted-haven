@@ -1,5 +1,7 @@
 import { notFound } from 'next/navigation';
 import Image from 'next/image';
+import { fetchSellerProfile } from '@/app/lib/data';
+import { SellerProfile } from '@/app/lib/definitions';
 
 interface SellerProduct {
   id: number;
@@ -11,7 +13,6 @@ interface SellerProduct {
 interface Seller {
   id: string;
   name: string;
-  slug: string;
   avatar: string;
   bio: string;
   location: string;
@@ -25,7 +26,6 @@ const mockSellers: Record<string, Seller> = {
   '1': {
     id: '1',
     name: "Mama Sarah's Crafts",
-    slug: "mama-sarah-crafts",
     avatar: "/images/mama-sarah.jpg",
     bio: "Proud Kampala artisan specializing in handmade basket weaving, pottery, and recycled fabric home decor. I source materials locally from Ugandan markets and create pieces that celebrate our rich cultural heritage.",
     location: "Kampala, Uganda",

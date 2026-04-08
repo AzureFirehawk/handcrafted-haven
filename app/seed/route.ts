@@ -40,15 +40,43 @@ async function seedSellers() {
       name VARCHAR(255) NOT NULL,
       email TEXT NOT NULL UNIQUE,
       bio TEXT,
+      avatar TEXT,
+      location TEXT,
       created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
     );
   `;
 
   await sql`
-    INSERT INTO sellers (name, email, bio)
-    VALUES 
-      ('Oak & Ember Co.', 'oakember@example.com', 'Rustic handmade wooden goods.'),
-      ('Clay & Color Studio', 'claycolor@example.com', 'Hand-painted ceramics and gifts.')
+  INSERT INTO sellers (name, email, bio, avatar, location)
+  VALUES 
+    (
+      'Mama Sarah''s Crafts',
+      'mamasarah@example.com',
+      'Proud Kampala artisan specializing in handmade basket weaving, pottery, and recycled fabric home decor.',
+      'https://images.unsplash.com/photo-1544723795-3fb6469f5b39',
+      'Kampala, Uganda'
+    ),
+    (
+      'Nordic Pine Workshop',
+      'nordicpine@example.com',
+      'Scandinavian-inspired wooden home goods crafted from sustainably sourced pine.',
+      'https://images.unsplash.com/photo-1500648767791-00dcc994a43e',
+      'Oslo, Norway'
+    ),
+    (
+      'Desert Clay Co.',
+      'desertclay@example.com',
+      'Hand-thrown pottery inspired by desert tones and textures.',
+      'https://images.unsplash.com/photo-1544005313-94ddf0286df2',
+      'Santa Fe, USA'
+    ),
+    (
+      'Thread & Loom',
+      'threadloom@example.com',
+      'Textile artist creating handwoven scarves and home fabrics.',
+      'https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e',
+      'Istanbul, Turkey'
+    )
     ON CONFLICT (email) DO NOTHING;
   `;
 }
@@ -70,31 +98,102 @@ async function seedProducts() {
     );
   `;
 
+  await sql`
+    DO $$ 
+    BEGIN
+      IF NOT EXISTS (
+        SELECT 1 FROM pg_constraint 
+        WHERE conname = 'unique_product'
+      ) THEN
+        ALTER TABLE products 
+        ADD CONSTRAINT unique_product UNIQUE (name, seller_id);
+      END IF;
+    END $$;
+  `;
+  
   const sellers = await sql`SELECT id, email FROM sellers`;
 
-  const oakSeller = sellers.find(s => s.email === 'oakember@example.com');
-  const claySeller = sellers.find(s => s.email === 'claycolor@example.com');
-
+  const getSeller = (email: string) => {
+    const seller = sellers.find((s) => s.email === email);
+    if (!seller) throw new Error(`Seller not found: ${email}`);
+    return seller.id;
+  };
+  
   await sql`
-    INSERT INTO products (name, description, price, image, category, seller_id)
-    VALUES
-      (
-        'Rustic Wooden Candle Holder',
-        'Hand-carved from reclaimed wood.',
-        24.99,
-        'https://images.unsplash.com/photo-1602524813704-5c4c84c7c6b0?auto=format&fit=crop&w=800&q=80',
-        'Home Décor',
-        ${oakSeller?.id}
-      ),
-      (
-        'Hand-Painted Ceramic Mug',
-        'Each mug is uniquely hand-painted.',
-        18.50,
-        'https://images.unsplash.com/photo-1514228742587-6b1558fcf93a?auto=format&fit=crop&w=800&q=80',
-        'Handmade Gifts',
-        ${claySeller?.id}
-      )
-    ON CONFLICT DO NOTHING;
+  INSERT INTO products (name, description, price, image, category, seller_id)
+  VALUES
+    -- Mama Sarah
+    (
+      'Handwoven Basket',
+      'Traditional Ugandan basket made from natural fibers.',
+      32.00,
+      'https://images.unsplash.com/photo-1598300056393-4aac492f4344',
+      'Home Décor',
+      ${getSeller('mamasarah@example.com')}
+    ),
+    (
+      'Recycled Fabric Wall Hanging',
+      'Colorful wall décor made from recycled textiles.',
+      45.00,
+      'https://images.unsplash.com/photo-1616627452603-9fdfc7a4b3d7',
+      'Home Décor',
+      ${getSeller('mamasarah@example.com')}
+    ),
+
+    -- Nordic Pine
+    (
+      'Minimalist Wooden Lamp',
+      'Clean Scandinavian design with warm lighting.',
+      65.00,
+      'https://images.unsplash.com/photo-1505691938895-1758d7feb511',
+      'Home Décor',
+      ${getSeller('nordicpine@example.com')}
+    ),
+    (
+      'Hand-carved Serving Board',
+      'Perfect for kitchen or display.',
+      38.00,
+      'https://images.unsplash.com/photo-1582582621959-48d27397dc69',
+      'Kitchen',
+      ${getSeller('nordicpine@example.com')}
+    ),
+
+    -- Desert Clay
+    (
+      'Desert Glaze Vase',
+      'Earth-toned ceramic vase with matte finish.',
+      52.00,
+      'https://images.unsplash.com/photo-1578749556568-bc2c40e68b61',
+      'Home Décor',
+      ${getSeller('desertclay@example.com')}
+    ),
+    (
+      'Clay Coffee Mug Set',
+      'Set of 2 handmade mugs.',
+      28.00,
+      'https://images.unsplash.com/photo-1514228742587-6b1558fcf93a',
+      'Kitchen',
+      ${getSeller('desertclay@example.com')}
+    ),
+
+    -- Thread & Loom
+    (
+      'Handwoven Wool Scarf',
+      'Soft and warm artisan scarf.',
+      40.00,
+      'https://images.unsplash.com/photo-1521335629791-ce4aec67dd53',
+      'Apparel',
+      ${getSeller('threadloom@example.com')}
+    ),
+    (
+      'Textured Throw Blanket',
+      'Cozy woven blanket with intricate patterns.',
+      75.00,
+      'https://images.unsplash.com/photo-1600585154340-be6161a56a0c',
+      'Home Décor',
+      ${getSeller('threadloom@example.com')}
+    )
+    ON CONFLICT (name, seller_id) DO NOTHING;
   `;
 }
 
