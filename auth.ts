@@ -3,6 +3,8 @@ import { authConfig } from './auth.config';
 import Credentials from 'next-auth/providers/credentials';
 import { z } from 'zod';
 import bcrypt from 'bcrypt';
+import { fetchUserByEmail } from './app/lib/data';
+import type { User } from '@/app/lib/definitions';
 
 export const { auth, signIn, signOut } = NextAuth({
   ...authConfig,
@@ -17,18 +19,25 @@ export const { auth, signIn, signOut } = NextAuth({
           const { email, password } = parsedCredentials.data;
 
           // TEMPORAL USER INFO
-          const mockUser = {
-            id: '1',
-            name: 'Jonatan Troche',
-            email: 'user@nextmail.com',
-            password: await bcrypt.hash('123456', 10), 
-          };
+          // const mockUser = {
+          //   id: '1',
+          //   name: 'Jonatan Troche',
+          //   email: 'user@nextmail.com',
+          //   password: await bcrypt.hash('123456', 10), 
+          // };
 
-          if (email === mockUser.email) {
-            const passwordsMatch = await bcrypt.compare(password, mockUser.password);
-            if (passwordsMatch) return mockUser;
-          }
+          // if (email === mockUser.email) {
+          //   const passwordsMatch = await bcrypt.compare(password, mockUser.password);
+          //   if (passwordsMatch) return mockUser;
+          // }
+          const user = await fetchUserByEmail(email);
+          if (!user) return null;
+
+          const passwordsMatch = await bcrypt.compare(password, user.password);
+          if (passwordsMatch) return user;
         }
+
+        console.log('Invalid credentials')
         return null;
       },
     }),
