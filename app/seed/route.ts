@@ -1,5 +1,6 @@
 import bcrypt from 'bcrypt';
 import postgres from 'postgres';
+import { Seller } from '../lib/definitions';
 
 const sql = postgres(process.env.POSTGRES_URL!, { ssl: 'require' });
 
@@ -128,7 +129,7 @@ async function seedProducts(sql: any) {
   const sellers = await sql`SELECT id, email FROM sellers`;
 
   const getSeller = (email: string) => {
-    const seller = sellers.find((s) => s.email === email);
+    const seller = sellers.find((s: Seller) => s.email === email);
     if (!seller) throw new Error(`Seller not found: ${email}`);
     return seller.id;
   };
