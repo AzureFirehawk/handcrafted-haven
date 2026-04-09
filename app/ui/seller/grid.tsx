@@ -4,17 +4,10 @@ import Link from "next/link";
 import Image from "next/image";
 import { useState, useMemo } from "react";
 
-interface Seller {
-  id: string;
-  name: string;
-  avatar?: string;
-  location?: string;
-  rating?: number;
-  productsCount?: number;
-}
+import { SellerProfile } from "@/app/lib/definitions";
 
 interface SellerGridProps {
-  initialSellers?: Seller[];
+  initialSellers?: SellerProfile[];
 }
 
 export default function SellerGrid({ initialSellers = [] }: SellerGridProps) {
