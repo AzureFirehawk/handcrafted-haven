@@ -39,6 +39,21 @@ const mockSellers: Record<string, Seller> = {
       { id: 103, name: "Recycled Fabric Wall Hanging", price: 45000, image: "/images/recycled-fabric-wall-hanging.jpg" }
     ]
   },
+  '2': {
+    id: '2',
+    name: "Bap Craft Studio",
+    avatar: "/images/bap-craft.jpg",
+    bio: "Creative studio specializing in unique handmade crafts and modern designs. We blend traditional techniques with contemporary aesthetics to create one-of-a-kind pieces that brighten your home.",
+    location: "Kampala, Uganda",
+    joined: "March 2025",
+    productsCount: 24,
+    rating: 4.6,
+    products: [
+      { id: 201, name: "Decorative Craft Piece", price: 42000, image: "/images/bap-craft.jpg" },
+      { id: 202, name: "Modern Handmade Vase", price: 50000, image: "/images/modern-handmade-vase.jpg" }
+    ]
+  },
+  
   '3': {
     id: '3',
     name: "Artisan Wooden Creations",
