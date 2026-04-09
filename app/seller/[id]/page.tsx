@@ -1,13 +1,21 @@
 import { notFound } from "next/navigation";
+import Link from "next/link";
 import Image from "next/image";
 import { fetchSellerProfile } from "@/app/lib/data";
+import SellerActions from "@/app/ui/seller/sellerActions";
 
 export default async function SellerProfilePage({
   params,
 }: {
   params: { id: string };
 }) {
-  const seller = await fetchSellerProfile(params.id);
+  const { id } = await params;
+
+  if (!id) {
+    notFound();
+  }
+
+  const seller = await fetchSellerProfile(id);
 
   if (!seller) {
     notFound();
@@ -55,14 +63,7 @@ export default async function SellerProfilePage({
               {seller.bio || "No bio available."}
             </p>
 
-            <div className="flex gap-4">
-              <button className="px-10 py-4 bg-[#8B5A2B] hover:bg-[#6B4420] text-white rounded-full font-medium transition-all">
-                Message Seller
-              </button>
-              <button className="px-10 py-4 border-2 border-gray-400 hover:bg-gray-100 rounded-full font-medium transition-all">
-                Follow Shop
-              </button>
-            </div>
+            <SellerActions sellerName={seller.name} />
           </div>
         </div>
 
@@ -74,29 +75,30 @@ export default async function SellerProfilePage({
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {seller.products.map((product) => (
-              <div
-                key={product.id}
-                className="bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 group"
-              >
-                <div className="relative h-64 bg-gray-100">
-                  <Image
-                    src={product.image || "/images/placeholder.jpg"}
-                    alt={product.name}
-                    fill
-                    className="object-cover group-hover:scale-105 transition-transform duration-500"
-                  />
-                </div>
+              <Link key={product.id} href={`/products/${product.id}`}>
+                <div className="bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 group cursor-pointer">
+                  
+                  <div className="relative h-64 bg-gray-100">
+                    <Image
+                      src={product.image || "/images/placeholder.jpg"}
+                      alt={product.name}
+                      fill
+                      className="object-cover group-hover:scale-105 transition-transform duration-500"
+                    />
+                  </div>
 
-                <div className="p-6">
-                  <h3 className="font-medium text-xl mb-3 line-clamp-2">
-                    {product.name}
-                  </h3>
+                  <div className="p-6">
+                    <h3 className="font-medium text-xl mb-3 line-clamp-2">
+                      {product.name}
+                    </h3>
 
-                  <p className="text-[#8B5A2B] text-2xl font-semibold">
-                    ${Number(product.price).toFixed(2)}
-                  </p>
+                    <p className="text-[#8B5A2B] text-2xl font-semibold">
+                      ${Number(product.price).toFixed(2)}
+                    </p>
+                  </div>
+
                 </div>
-              </div>
+              </Link>
             ))}
           </div>
         </div>

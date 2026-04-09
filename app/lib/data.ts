@@ -27,6 +27,7 @@ export async function fetchProducts(): Promise<ProductWithSeller[]> {
         products.image,
         products.category,
         products.created_at,
+        products.seller_id,
         sellers.name AS seller_name,
         sellers.email AS seller_email
       FROM products
@@ -56,6 +57,7 @@ export async function fetchProductById(id: string): Promise<ProductWithSeller | 
         products.image,
         products.category,
         products.created_at,
+        products.seller_id,
         sellers.name AS seller_name,
         sellers.email AS seller_email
       FROM products
@@ -109,6 +111,11 @@ export async function fetchSellerByEmail(email: string) {
 }
 
 export async function fetchSellerProfile(id: string): Promise<SellerProfile | null> {
+  console.log("Seller ID:", id);
+  if (!id) {
+    console.error("❌ fetchSellerProfile called with undefined id");
+    return null;
+  }
   try {
     const sellerData = await sql<Seller[]>`
       SELECT * FROM sellers WHERE id = ${id}
