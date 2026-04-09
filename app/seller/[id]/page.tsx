@@ -1,8 +1,13 @@
+
 'use client';
 
 import { notFound } from 'next/navigation';
 import Image from 'next/image';
 import { useState, useEffect } from 'react';
+import { notFound } from 'next/navigation';
+import Image from 'next/image';
+import { fetchSellerProfile } from '@/app/lib/data';
+import { SellerProfile } from '@/app/lib/definitions';
 
 interface SellerProduct {
   id: number;
@@ -101,6 +106,40 @@ export default function SellerProfilePage({ params }: { params: Promise<{ id: st
     setTimeout(() => setShowFollowSuccess(false), 3000);
   };
 
+      {
+        id: 101,
+        name: "Woven Kisii Basket Set",
+        price: 65000,
+        image: "/images/woven-basket-kisii.jpg"
+      },
+      {
+        id: 102,
+        name: "Handmade Ceramic Coffee Mug",
+        price: 28000,
+        image: "/images/ceramic-coffee-mug.jpg"
+      },
+      {
+        id: 103,
+        name: "Recycled Fabric Wall Hanging",
+        price: 45000,
+        image: "/images/recycled-fabric-wall-hanging.jpg"
+      }
+    ]
+  }
+};
+
+interface SellerProfileProps {
+  params: Promise<{ id: string }>;
+}
+
+export default async function SellerProfilePage({ params }: SellerProfileProps) {
+  const { id } = await params;
+  const seller = mockSellers[id];
+
+  if (!seller) {
+    notFound();
+  }
+
   return (
     <div className="min-h-screen bg-[#f8f5f0] py-12">
       <div className="max-w-6xl mx-auto px-6">
@@ -122,6 +161,9 @@ export default function SellerProfilePage({ params }: { params: Promise<{ id: st
           <div className="flex-1 pt-4">
             <h1 className="text-5xl font-bold text-gray-900 mb-4">{seller.name}</h1>
             
+            <h1 className="text-5xl font-bold text-gray-900 mb-4">
+              {seller.name}
+            </h1>
             <div className="flex flex-wrap gap-x-6 gap-y-2 text-gray-600 mb-8 text-sm">
               <span>📍 {seller.location}</span>
               <span>Joined {seller.joined}</span>
@@ -143,6 +185,10 @@ export default function SellerProfilePage({ params }: { params: Promise<{ id: st
                 onClick={handleFollow}
                 className="px-10 py-4 border-2 border-gray-400 hover:bg-gray-100 rounded-full font-medium transition-all"
               >
+              <button className="px-10 py-4 bg-[#8B5A2B] hover:bg-[#6B4420] text-white rounded-full font-medium transition-all">
+                Message Mama Sarah
+              </button>
+              <button className="px-10 py-4 border-2 border-gray-400 hover:bg-gray-100 rounded-full font-medium transition-all">
                 Follow Shop
               </button>
             </div>
@@ -154,7 +200,6 @@ export default function SellerProfilePage({ params }: { params: Promise<{ id: st
           <h2 className="text-3xl font-semibold mb-10 text-gray-900">
             Products by {seller.name.split("'")[0]}
           </h2>
-          
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {seller.products.map((product) => (
               <div 
