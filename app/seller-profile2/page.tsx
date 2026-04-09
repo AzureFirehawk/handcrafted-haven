@@ -180,3 +180,4 @@ export default function SellerProfile2() {
     </div>
   );
 }
+
