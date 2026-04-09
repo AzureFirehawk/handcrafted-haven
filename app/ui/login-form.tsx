@@ -26,7 +26,7 @@ export default function LoginForm() {
               Email Address
             </label>
             <input
-              className="block w-full rounded-md border border-[#eadfd3] py-2 px-3 text-sm outline-[#7a5c46] placeholder:text-gray-400"
+              className="block w-full rounded-md border border-[#eadfd3] py-2 px-3 text-sm outline-[#7a5c46] text-stone-900 placeholder:text-gray-400"
               id="email" type="email" name="email" placeholder="Enter your email" required
             />
           </div>
@@ -35,7 +35,7 @@ export default function LoginForm() {
               Password
             </label>
             <input
-              className="block w-full rounded-md border border-[#eadfd3] py-2 px-3 text-sm outline-[#7a5c46] placeholder:text-gray-400"
+              className="block w-full rounded-md border border-[#eadfd3] py-2 px-3 text-sm outline-[#7a5c46] text-stone-900 placeholder:text-gray-400"
               id="password" type="password" name="password" placeholder="Min. 6 characters" required minLength={6}
             />
           </div>
