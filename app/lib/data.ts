@@ -116,6 +116,8 @@ export async function fetchProductsBySellerEmail(email: string) {
   } catch (error) {
     console.error("Database Error:", error);
     return [];
+  }
+}
 export async function fetchAllSellers(): Promise<SellerProfile[]> {
   try {
     const data = await sql<SellerProfile[]>`
