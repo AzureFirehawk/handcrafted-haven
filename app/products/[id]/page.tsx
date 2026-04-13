@@ -1,11 +1,14 @@
 import Link from "next/link";
-import { fetchProductById } from "@/app/lib/data";
+import { fetchProductById, getReviewsByProductId, getAverageRating } from "@/app/lib/data";
+import ReviewSection from "@/app/ui/reviews/productReviews";
 
 
 export default async function ProductPage({ params }: any) {
   const { id } = await params;
 
   const product = await fetchProductById(id);
+  const reviews = await getReviewsByProductId(id);
+  const averageRating = await getAverageRating(id);
 
   if (!product) {
     return (
@@ -76,6 +79,8 @@ export default async function ProductPage({ params }: any) {
               </Link>
             </div>
           </div>
+
+          <ReviewSection productId={product.id} />
 
         </div>
       </div>
