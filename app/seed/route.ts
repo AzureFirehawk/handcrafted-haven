@@ -26,7 +26,8 @@ async function seedUsers(sql: any) {
     INSERT INTO users (name, email, password)
     VALUES 
       ('Jane Doe', 'jane@example.com', ${password}),
-      ('John Smith', 'john@example.com', ${password})
+      ('John Smith', 'john@example.com', ${password}),
+      ('Oak & Ember Admin', 'oakember@example.com', ${password})
     ON CONFLICT (email) DO NOTHING;
   `;
 }

@@ -38,9 +38,12 @@ export default async function SiteHeader({ userEmail }: SiteHeaderProps) {
         <div className="flex items-center gap-4">
           {session ? (
             <div className="flex items-center gap-4">
-              <span className="hidden md:block text-sm text-[#8b6f5a]">
-                Artisan: {session.user?.email}
-              </span>
+              <Link 
+                href="/profile" 
+                className="hidden md:block text-sm text-[#8b6f5a] hover:text-[#7a5c46] hover:underline transition"
+              >
+                Artisan: <span className="font-semibold">{session.user?.email}</span>
+              </Link>
               <form
                 action={async () => {
                   'use server';

@@ -98,6 +98,24 @@ export async function fetchUserByEmail(email: string) {
    SELLERS
 ====================== */
 
+// app/lib/data.ts
+
+export async function fetchProductsBySellerEmail(email: string) {
+  try {
+    const data = await sql`
+      SELECT products.* FROM products
+      JOIN sellers ON products.seller_id = sellers.id
+      WHERE sellers.email = ${email}
+      ORDER BY products.created_at DESC
+    `;
+    
+    return data.map((row) => ({
+      ...row,
+      price: Number(row.price),
+    })) as Product[];
+  } catch (error) {
+    console.error("Database Error:", error);
+    return [];
 export async function fetchAllSellers(): Promise<SellerProfile[]> {
   try {
     const data = await sql<SellerProfile[]>`
