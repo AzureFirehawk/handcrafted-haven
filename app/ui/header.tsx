@@ -22,10 +22,10 @@ export default async function SiteHeader({ userEmail }: SiteHeaderProps) {
             Shop
           </Link>
           <Link
-            href="/categories"
+            href="/seller"
             className="text-stone-700 transition hover:text-amber-700"
           >
-            Categories
+            Sellers
           </Link>
           <Link href="/about" className="text-stone-700 transition hover:text-amber-700">
             About
