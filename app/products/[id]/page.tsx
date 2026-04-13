@@ -45,6 +45,15 @@ export default async function ProductPage({ params }: any) {
               {product.name}
             </h1>
 
+            <div className="mt-2">
+              <Link
+                href={`/seller/${product.seller_id}`}
+                className="text-[#8b6f5a] hover:underline"
+              >
+                Sold by {product.seller_name}
+              </Link>
+            </div>
+
             <p className="mt-4 text-2xl font-semibold text-[#7a5c46]">
               ${product.price.toFixed(2)}
             </p>
@@ -59,9 +68,12 @@ export default async function ProductPage({ params }: any) {
                 Buy Now
               </button>
 
-              <button className="rounded-full border border-[#7a5c46] px-6 py-3 hover:bg-white transition">
-                Contact Seller
-              </button>
+              <Link
+                href={`/seller/${product.seller_id}`}
+                className="rounded-full border border-[#7a5c46] px-6 py-3 hover:bg-white transition inline-block text-center"
+              >
+                View Seller
+              </Link>
             </div>
           </div>
 

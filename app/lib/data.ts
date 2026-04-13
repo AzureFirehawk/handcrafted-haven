@@ -2,6 +2,9 @@ import postgres, { Sql } from "postgres";
 import {
   ProductWithSeller,
   Product,
+  Seller,
+  SellerProfile,
+  SellerProduct,
 } from "./definitions";
 
 const sql: Sql = postgres(process.env.POSTGRES_URL!, {
@@ -24,6 +27,7 @@ export async function fetchProducts(): Promise<ProductWithSeller[]> {
         products.image,
         products.category,
         products.created_at,
+        products.seller_id,
         sellers.name AS seller_name,
         sellers.email AS seller_email
       FROM products
@@ -53,6 +57,7 @@ export async function fetchProductById(id: string): Promise<ProductWithSeller | 
         products.image,
         products.category,
         products.created_at,
+        products.seller_id,
         sellers.name AS seller_name,
         sellers.email AS seller_email
       FROM products
@@ -111,5 +116,91 @@ export async function fetchProductsBySellerEmail(email: string) {
   } catch (error) {
     console.error("Database Error:", error);
     return [];
+export async function fetchAllSellers(): Promise<SellerProfile[]> {
+  try {
+    const data = await sql<SellerProfile[]>`
+      SELECT 
+        s.id,
+        s.name,
+        s.avatar,
+        s.email,
+        s.bio,
+        s.location,
+        s.created_at AS joined,
+        COUNT(p.id) AS "productsCount",
+        0 AS rating -- placeholder until you implement seller ratings
+      FROM sellers s
+      LEFT JOIN products p ON p.seller_id = s.id
+      GROUP BY s.id
+      ORDER BY s.name
+    `;
+
+    // Convert numeric fields
+    return data.map((row) => ({
+      ...row,
+      productsCount: Number(row.productsCount),
+      rating: Number(row.rating),
+      joined: row.joined, // leave as string for now
+    }));
+  } catch (error) {
+    console.error("Database Error:", error);
+    throw new Error("Failed to fetch sellers.");
+  }
+}
+
+export async function fetchSellerByEmail(email: string) {
+  try {
+    const data = await sql`
+      SELECT * FROM sellers WHERE email = ${email}
+    `;
+    return data[0];
+  } catch (error) {
+    console.error("Database Error:", error);
+    throw new Error("Failed to fetch seller.");
+  }
+}
+
+export async function fetchSellerProfile(id: string): Promise<SellerProfile | null> {
+  console.log("Seller ID:", id);
+  if (!id) {
+    console.error("❌ fetchSellerProfile called with undefined id");
+    return null;
+  }
+  try {
+    const sellerData = await sql<Seller[]>`
+      SELECT * FROM sellers WHERE id = ${id}
+    `;
+
+    if (!sellerData[0]) return null;
+
+    const productData = await sql<Product[]>`
+      SELECT id, name, price, image 
+      FROM products 
+      WHERE seller_id = ${id}
+    `;
+
+    // 🔥 Transform products to match SellerProduct
+    const products: SellerProduct[] = productData.map((p) => ({
+      id: p.id,
+      name: p.name,
+      price: Number(p.price),
+      image: p.image ?? null,
+    }));
+
+    return {
+      id: sellerData[0].id,
+      name: sellerData[0].name,
+      email: sellerData[0].email,
+      avatar: sellerData[0].avatar ?? null,
+      bio: sellerData[0].bio ?? null,
+      location: sellerData[0].location ?? null,
+      joined: sellerData[0].created_at,
+      productsCount: products.length,
+      rating: 5, // placeholder
+      products,
+    };
+  } catch (error) {
+    console.error("Database Error:", error);
+    throw new Error("Failed to fetch seller profile.");
   }
 }
