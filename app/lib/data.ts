@@ -247,6 +247,25 @@ export async function getAverageRating(id: string): Promise<RatingSummary> {
   }
 }
 
+export async function getAllRatings(productIds: string[]) {
+  try {
+    const data = await sql`
+      SELECT
+        product_id,
+        AVG(rating)::numeric(2,1) as average,
+        COUNT(*) as count
+      FROM reviews
+      WHERE product_id = ANY(${productIds})
+      GROUP BY product_id
+    `;
+
+    return data;
+  } catch (error) {
+    console.error("Database Error:", error);
+    throw new Error("Failed to fetch ratings.");
+  }
+}
+
 export async function getUserReviewForProduct(
   productId: string,
   userId: string
