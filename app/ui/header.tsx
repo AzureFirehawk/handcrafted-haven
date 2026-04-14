@@ -22,10 +22,10 @@ export default async function SiteHeader({ userEmail }: SiteHeaderProps) {
             Shop
           </Link>
           <Link
-            href="/categories"
+            href="/seller"
             className="text-stone-700 transition hover:text-amber-700"
           >
-            Categories
+            Sellers
           </Link>
           <Link href="/about" className="text-stone-700 transition hover:text-amber-700">
             About
@@ -38,9 +38,12 @@ export default async function SiteHeader({ userEmail }: SiteHeaderProps) {
         <div className="flex items-center gap-4">
           {session ? (
             <div className="flex items-center gap-4">
-              <span className="hidden md:block text-sm text-[#8b6f5a]">
-                Artisan: {session.user?.email}
-              </span>
+              <Link 
+                href="/profile" 
+                className="hidden md:block text-sm text-[#8b6f5a] hover:text-[#7a5c46] hover:underline transition"
+              >
+                Artisan: <span className="font-semibold">{session.user?.email}</span>
+              </Link>
               <form
                 action={async () => {
                   'use server';

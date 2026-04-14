@@ -1,6 +1,13 @@
 import Link from "next/link";
-import { fetchProductById } from "@/app/lib/data";
+import { fetchProductById, getReviewsByProductId, getAverageRating, getUserReviewForProduct } from "@/app/lib/data";
+import ReviewSection from "@/app/ui/reviews/productReviews";
+import ReviewForm from "@/app/ui/reviews/reviewForm";
+import { auth } from "@/auth";
+import postgres from "postgres";
 
+const sql = postgres(process.env.POSTGRES_URL!, {
+  ssl: "require",
+})
 
 export default async function ProductPage({ params }: any) {
   const { id } = await params;
@@ -13,6 +20,18 @@ export default async function ProductPage({ params }: any) {
         <p className="text-xl text-[#6b5647]">Product not found.</p>
       </main>
     );
+  }
+
+  const session = await auth();
+
+  let userReview = null;
+  if (session?.user?.email) {
+    const user = await sql`
+      SELECT * FROM users WHERE email = ${session.user.email}
+    `;
+    if (user[0]) {
+      userReview = await getUserReviewForProduct(id, user[0].id);
+    }
   }
 
   return (
@@ -76,6 +95,12 @@ export default async function ProductPage({ params }: any) {
               </Link>
             </div>
           </div>
+
+          <ReviewForm
+            productId={product.id}
+            existingReview={userReview}
+          />
+          <ReviewSection productId={product.id} />
 
         </div>
       </div>

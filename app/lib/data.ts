@@ -5,6 +5,8 @@ import {
   Seller,
   SellerProfile,
   SellerProduct,
+  ReviewWithUser,
+  RatingSummary,
 } from "./definitions";
 
 const sql: Sql = postgres(process.env.POSTGRES_URL!, {
@@ -98,6 +100,26 @@ export async function fetchUserByEmail(email: string) {
    SELLERS
 ====================== */
 
+// app/lib/data.ts
+
+export async function fetchProductsBySellerEmail(email: string) {
+  try {
+    const data = await sql`
+      SELECT products.* FROM products
+      JOIN sellers ON products.seller_id = sellers.id
+      WHERE sellers.email = ${email}
+      ORDER BY products.created_at DESC
+    `;
+    
+    return data.map((row) => ({
+      ...row,
+      price: Number(row.price),
+    })) as Product[];
+  } catch (error) {
+    console.error("Database Error:", error);
+    return [];
+  }
+}
 export async function fetchAllSellers(): Promise<SellerProfile[]> {
   try {
     const data = await sql<SellerProfile[]>`
@@ -184,5 +206,81 @@ export async function fetchSellerProfile(id: string): Promise<SellerProfile | nu
   } catch (error) {
     console.error("Database Error:", error);
     throw new Error("Failed to fetch seller profile.");
+  }
+}
+
+/* ======================
+   REVIEWS
+====================== */
+export async function getReviewsByProductId(id: string): Promise<ReviewWithUser[]> {
+  try {
+    const data = await sql<ReviewWithUser[]>`
+      SELECT reviews.*, users.name AS user_name 
+      FROM reviews
+      JOIN users ON reviews.user_id = users.id
+      WHERE reviews.product_id = ${id}
+      ORDER BY reviews.created_at DESC
+    `;
+    return data;
+  } catch (error) {
+    console.error("Database Error:", error);
+    throw new Error("Failed to fetch reviews.");
+  }
+}
+
+export async function getAverageRating(id: string): Promise<RatingSummary> {
+  try {
+    const rating = await sql`
+      SELECT
+        AVG(rating)::numeric(2,1) as average,
+        COUNT(*) as count
+      FROM reviews
+      WHERE product_id = ${id}
+    `;
+    return {
+      average: Number(rating[0].average),
+      count: Number(rating[0].count),
+    };
+  } catch (error) {
+    console.error("Database Error:", error);
+    throw new Error("Failed to fetch average rating.");
+  }
+}
+
+export async function getAllRatings(productIds: string[]) {
+  try {
+    const data = await sql`
+      SELECT
+        product_id,
+        AVG(rating)::numeric(2,1) as average,
+        COUNT(*) as count
+      FROM reviews
+      WHERE product_id = ANY(${productIds})
+      GROUP BY product_id
+    `;
+
+    return data;
+  } catch (error) {
+    console.error("Database Error:", error);
+    throw new Error("Failed to fetch ratings.");
+  }
+}
+
+export async function getUserReviewForProduct(
+  productId: string,
+  userId: string
+) {
+  try {
+    const data = await sql`
+      SELECT *
+      FROM reviews
+      WHERE product_id = ${productId} 
+      AND user_id = ${userId}
+      LIMIT 1
+    `;
+    return data[0] || null;
+  } catch (error) {
+    console.error("Database Error:", error);
+    throw new Error("Failed to fetch user review.");
   }
 }

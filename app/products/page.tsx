@@ -1,9 +1,15 @@
-import { fetchProducts } from "@/app/lib/data";
+import { fetchProducts, getAllRatings } from "@/app/lib/data";
 import ProductGrid from "@/app/ui/products/grid";
 
 
 export default async function ProductsPage() {
   const products = await fetchProducts();
+  const ratings = await getAllRatings(
+    products.map((product) => product.id)
+  );
+  const ratingMap = Object.fromEntries(
+  ratings.map((r) => [r.product_id, r])
+);
 
   return (
     <main className="min-h-screen bg-[#f8f3ee] text-[#3e2f25] px-6 py-16 md:px-16">
@@ -20,7 +26,10 @@ export default async function ProductsPage() {
 
       {/* Product Grid (Client Component) */}
       <div className="mt-12 max-w-6xl mx-auto">
-        <ProductGrid initialProducts={products || []} />
+        <ProductGrid
+          initialProducts={products || []}
+          ratingMap={ratingMap}
+        />
       </div>
     </main>
   );
