@@ -209,6 +209,26 @@ export async function fetchSellerProfile(id: string): Promise<SellerProfile | nu
   }
 }
 
+export async function getSellerRatings() {
+  try {
+    const data = await sql`
+      SELECT
+        sellers.id as seller_id,
+        AVG(reviews.rating)::numeric(2,1) as average,
+        COUNT(reviews.id) as count
+      FROM sellers
+      LEFT JOIN products ON products.seller_id = sellers.id
+      LEFT JOIN reviews ON reviews.product_id = products.id
+      GROUP BY sellers.id
+    `;
+
+    return data;
+  } catch (error) {
+    console.error("Database Error:", error);
+    throw new Error("Failed to fetch seller ratings.");
+  }
+}
+
 /* ======================
    REVIEWS
 ====================== */
