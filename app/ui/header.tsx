@@ -15,10 +15,16 @@ export default async function SiteHeader({ userEmail }: SiteHeaderProps) {
         </Link>
  
         <nav className="hidden items-center gap-8 md:flex">
-          <Link href="/" className="text-stone-700 transition hover:text-amber-700">
+          <Link
+            href="/"
+            className="text-stone-700 transition hover:text-amber-700"
+          >
             Home
           </Link>
-          <Link href="/products" className="text-stone-700 transition hover:text-amber-700">
+          <Link
+            href="/products"
+            className="text-stone-700 transition hover:text-amber-700"
+          >
             Shop
           </Link>
           <Link
@@ -26,12 +32,6 @@ export default async function SiteHeader({ userEmail }: SiteHeaderProps) {
             className="text-stone-700 transition hover:text-amber-700"
           >
             Sellers
-          </Link>
-          <Link href="/about" className="text-stone-700 transition hover:text-amber-700">
-            About
-          </Link>
-          <Link href="/contact" className="text-stone-700 transition hover:text-amber-700">
-            Contact
           </Link>
         </nav>
  

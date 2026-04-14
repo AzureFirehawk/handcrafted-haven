@@ -27,65 +27,27 @@ export default function SiteFooter() {
                 Shop
 </Link>
 </li>
-<li>
-<Link href="/about" className="hover:text-amber-400">
-                About
-</Link>
-</li>
-<li>
-<Link href="/contact" className="hover:text-amber-400">
-                Contact
-</Link>
-</li>
 </ul>
 </div>
- 
         <div>
-<h4 className="mb-4 text-lg font-medium text-white">Categories</h4>
-<ul className="space-y-2 text-sm">
-<li>
-<Link href="/categories/home-decor" className="hover:text-amber-400">
-                Home Décor
-</Link>
-</li>
-<li>
-<Link href="/categories/gifts" className="hover:text-amber-400">
-                Gifts
-</Link>
-</li>
-<li>
-<Link href="/categories/kitchen" className="hover:text-amber-400">
-                Kitchen
-</Link>
-</li>
-<li>
-<Link href="/categories/wall-art" className="hover:text-amber-400">
-                Wall Art
-</Link>
-</li>
-</ul>
-</div>
- 
-        <div>
-<h4 className="mb-4 text-lg font-medium text-white">Stay Connected</h4>
-<p className="mb-4 text-sm text-stone-300">
-            Get updates on new collections and artisan favorites.
-</p>
- 
+          <h4 className="mb-4 text-lg font-medium text-white">Stay Connected</h4>
+          <p className="mb-4 text-sm text-stone-300">
+                      Get updates on new collections and artisan favorites.
+          </p>
           <form className="space-y-3">
-<input
+            <input
               type="email"
               placeholder="Enter your email"
               className="w-full rounded-md border border-stone-700 bg-stone-800 px-4 py-3 text-sm text-white outline-none placeholder:text-stone-400"
             />
-<button
+            <button
               type="submit"
               className="w-full rounded-md bg-amber-700 px-4 py-3 text-sm font-medium text-white transition hover:bg-amber-800"
->
+            >
               Subscribe
-</button>
-</form>
-</div>
+            </button>
+          </form>
+        </div>
       </div>
  
       <div className="border-t border-stone-800 px-6 py-4 text-center text-sm text-stone-400">
