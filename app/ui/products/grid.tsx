@@ -6,7 +6,11 @@ import { ProductWithSeller } from "@/app/lib/definitions";
 
 export default function ProductGrid({
   initialProducts = [],
-}: { initialProducts?: ProductWithSeller[] }) {
+  ratingMap = {},
+}: {
+    initialProducts?: ProductWithSeller[];
+    ratingMap?: Record<string, { average: number;  count: number }>;
+}) {
   const [search, setSearch] = useState("");
   const [sort, setSort] = useState("default");
 
@@ -58,7 +62,10 @@ export default function ProductGrid({
 
       {/* Grid */}
       <div className="grid gap-8 sm:grid-cols-2 md:grid-cols-3 auto-rows-fr">
-        {filteredProducts.map((product) => (
+        {filteredProducts.map((product) => {
+          const rating = ratingMap[product.id];
+
+          return (
           <Link key={product.id} href={`/products/${product.id}`}>
             <div className="rounded-2xl bg-white shadow-md overflow-hidden hover:shadow-lg transition cursor-pointer flex flex-col h-full">
               
@@ -76,11 +83,33 @@ export default function ProductGrid({
                 <p className="mt-2 text-[#8b6f5a] font-medium">
                   ${product.price.toFixed(2)}
                 </p>
+                <div className="mt-2 flex items-center gap-2 text-sm text-[#8b6f5a]">
+                  {rating ? (
+                    <>
+                      <span className="font-semibold">
+                        {rating.average}
+                      </span>
+
+                      <span>
+                        {"⭐".repeat(Math.round(rating.average))}
+                      </span>
+
+                      <span className="text-xs">
+                        ({rating.count})
+                      </span>
+                    </>
+                  ) : (
+                    <span className="text-xs text-gray-400">
+                      No reviews yet
+                    </span>
+                  )}
+                </div>
               </div>
 
             </div>
           </Link>
-        ))}
+          )
+        })}
       </div>
 
       {/* Empty State */}

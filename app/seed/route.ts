@@ -27,7 +27,10 @@ async function seedUsers(sql: any) {
     VALUES 
       ('Jane Doe', 'jane@example.com', ${password}),
       ('John Smith', 'john@example.com', ${password}),
-      ('Oak & Ember Admin', 'oakember@example.com', ${password})
+      ('Oak & Ember Admin', 'oakember@example.com', ${password}),
+      ('Clay & Color Admin', 'claycolor@example.com', ${password}),
+      ('Golden Wick', 'goldenwick@example.com', ${password}),
+      ('Madison Thomas', 'madison@example.com', ${password})
     ON CONFLICT (email) DO NOTHING;
   `;
 }
@@ -296,6 +299,75 @@ async function seedOrderItems(sql: any) {
 }
 
 /* ======================
+   REVIEWS
+====================== */
+async function seedReviews(sql: any) {
+  await sql`
+    CREATE TABLE IF NOT EXISTS reviews (
+      id UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
+      product_id UUID NOT NULL REFERENCES products(id) ON DELETE CASCADE,
+      user_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+      rating INT NOT NULL CHECK (rating >= 1 AND rating <= 5),
+      title VARCHAR(255) NOT NULL,
+      comment TEXT,
+      created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    );
+  `;
+
+  await sql`
+    CREATE UNIQUE INDEX IF NOT EXISTS unique_user_product_review 
+    ON reviews (product_id, user_id);
+  `;
+const users = await sql`SELECT id FROM users`;
+  const products = await sql`SELECT id, name FROM products`;
+
+  // ✅ Generic review templates
+  const reviewTemplates = [
+    { rating: 5, title: "Absolutely love it!", comment: "Exceeded my expectations. Great craftsmanship and quality." },
+    { rating: 4, title: "Very nice product", comment: "Well made and looks great. Would recommend." },
+    { rating: 5, title: "Highly recommend", comment: "Beautiful piece and arrived quickly." },
+    { rating: 3, title: "It's okay", comment: "Decent quality but not exactly what I expected." },
+    { rating: 4, title: "Good value", comment: "Solid purchase for the price." },
+  ];
+
+  const reviewInserts: any[] = [];
+
+  for (const product of products) {
+    // randomly select 2–3 users per product
+    const shuffledUsers = users.sort(() => 0.5 - Math.random()).slice(0, 3);
+
+    for (const user of shuffledUsers) {
+      const template =
+        reviewTemplates[Math.floor(Math.random() * reviewTemplates.length)];
+
+      reviewInserts.push({
+        product_id: product.id,
+        user_id: user.id,
+        rating: template.rating,
+        title: template.title,
+        comment: `${template.comment} (Product: ${product.name})`,
+      });
+    }
+  }
+
+  for (const review of reviewInserts) {
+    await sql`
+      INSERT INTO reviews (product_id, user_id, rating, title, comment)
+      VALUES (
+        ${review.product_id},
+        ${review.user_id},
+        ${review.rating},
+        ${review.title},
+        ${review.comment}
+      )
+      ON CONFLICT (product_id, user_id) DO NOTHING;
+    `;
+  }
+}
+
+
+
+/* ======================
    MAIN SEED FUNCTION
 ====================== */
 export async function GET() {
@@ -308,6 +380,7 @@ export async function GET() {
       await seedProducts(tx);
       await seedOrders(tx);
       await seedOrderItems(tx);
+      await seedReviews(tx);
     });
 
     return new Response(

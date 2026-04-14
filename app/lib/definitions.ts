@@ -67,3 +67,22 @@ export type OrderItem = {
   quantity: number;
   price: number;
 };
+
+export type Review = {
+  id: string;
+  product_id: string;
+  user_id: string;
+  rating: number;
+  title: string;
+  comment: string | null;
+  created_at: string;
+};
+
+export type ReviewWithUser = Review & {
+  user_name: string;
+};
+
+export type RatingSummary = {
+  average: number;
+  count: number;
+};
