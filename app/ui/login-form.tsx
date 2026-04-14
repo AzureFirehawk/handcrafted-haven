@@ -3,6 +3,7 @@
 import { useActionState } from 'react';
 import { authenticate } from '@/app/lib/actions';
 import { useSearchParams } from 'next/navigation';
+import Link from 'next/link';
 
 export default function LoginForm() {
   const searchParams = useSearchParams();
@@ -55,6 +56,15 @@ export default function LoginForm() {
           {errorMessage && (
             <p className="text-sm text-red-500">{errorMessage}</p>
           )}
+        </div>
+        <div className="text-center text-sm text-gray-600">
+          Don&apos;t have an account?{" "}
+          <Link 
+            href="/sign-up" 
+            className="text-[#4A2C2A] font-bold hover:underline"
+          >
+            Sign Up
+          </Link>
         </div>
       </div>
     </form>
