@@ -246,3 +246,22 @@ export async function getAverageRating(id: string): Promise<RatingSummary> {
     throw new Error("Failed to fetch average rating.");
   }
 }
+
+export async function getUserReviewForProduct(
+  productId: string,
+  userId: string
+) {
+  try {
+    const data = await sql`
+      SELECT *
+      FROM reviews
+      WHERE product_id = ${productId} 
+      AND user_id = ${userId}
+      LIMIT 1
+    `;
+    return data[0] || null;
+  } catch (error) {
+    console.error("Database Error:", error);
+    throw new Error("Failed to fetch user review.");
+  }
+}
