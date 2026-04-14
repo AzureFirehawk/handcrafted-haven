@@ -5,12 +5,25 @@ import { useActionState } from "react";
 import { useEffect } from "react";
 import { createUser } from "@/app/lib/actions";
 import { useRouter } from "next/navigation";
-import { success } from "zod";
 import { SignupState } from "@/app/lib/definitions";
-import { create } from "domain";
+import { useFormStatus } from "react-dom";
+import Link from "next/link";
 
 function isValidEmail(email: string) {
   return /\S+@\S+\.\S+/.test(email);
+}
+
+function SubmitButton() {
+  const { pending } = useFormStatus();
+
+  return (
+    <button
+      className="mt-6 w-full rounded-full bg-[#7a5c46] px-6 py-3 text-white font-medium hover:bg-[#624836] transition disabled:opacity-50"
+      type="submit"
+      disabled={pending}>
+      {pending ? "Creating account..." : "Sign Up"}
+    </button>
+  );
 }
 
 export default function SignupForm() {
@@ -21,18 +34,38 @@ export default function SignupForm() {
     {}
   );
 
-  const [fieldErrors, setFieldErrors] = useState({
+  const [formValues, setFormValues] = useState({
     name: "",
     email: "",
     password: "",
     confirmPassword: "",
   });
 
-  const validate = (formData: FormData) => {
-    const name = formData.get("name") as string;
-    const email = formData.get("email") as string;
-    const password = formData.get("password") as string;
-    const confirmPassword = formData.get("confirmPassword") as string;
+  const [fieldErrors, setFieldErrors] = useState({
+    name: "",
+    email: "",
+    password: "",
+    confirmPassword: "",
+  });
+  const handleAction = () => {
+    if (!validate()) {
+      setFormValues((prev) => ({
+        ...prev,
+        password: "",
+        confirmPassword: "",
+      }));
+      return;
+    }
+
+    const formData = new FormData();
+    formData.append("name", formValues.name);
+    formData.append("email", formValues.email);
+    formData.append("password", formValues.password);
+
+    formAction(formData);
+  };
+  const validate = () => {
+    const { name, email, password, confirmPassword } = formValues;
 
     const errors = {
       name: "",
@@ -54,49 +87,127 @@ export default function SignupForm() {
     }
 
     setFieldErrors(errors);
-
-    useEffect(() => {
-      if (state.success) {
-        setTimeout(() => {
-          router.push("/login");
-        }, 1500);
-      }
-    }, [state, router]);
     return !errors.name && !errors.email && !errors.password && !errors.confirmPassword;
   };
 
+  useEffect(() => {
+    if (!state.success) return;
+
+    const timer = setTimeout(() => {
+      router.push("/login?signup=success");
+    }, 1500);
+
+    return () => clearTimeout(timer);
+  }, [state.success, router]);
+
   return (
     <form
-      action={async (formData) => {
-        if (!validate(formData)) return;
-        formAction(formData);
-      }}
+      action={handleAction}
       className="space-y-4"
     >
-      <input name="name" placeholder="Full Name" />
-      {fieldErrors.name && <p>{fieldErrors.name}</p>}
+      {/* TITLE */}
+      <h1 className="mb-2 text-2xl font-bold text-[#3e2f25]">
+        Create account.
+      </h1>
+      <p className="mb-6 text-sm text-[#8b6f5a]">
+        Join Handcrafted Haven today.
+      </p>
 
-      <input name="email" type="email" placeholder="Email" />
-      {fieldErrors.email && <p>{fieldErrors.email}</p>}
+      {/* NAME */}
+      <div>
+        <label className="mb-2 block text-xs font-medium text-[#3e2f25]">
+          Full Name
+        </label>
+        <input
+          name="name"
+          value={formValues.name}
+          onChange={(e) =>
+            setFormValues((prev) => ({ ...prev, name: e.target.value }))
+          }
+          className="block w-full rounded-md border border-[#eadfd3] py-2 px-3 text-sm outline-[#7a5c46] text-stone-900 placeholder:text-gray-400"
+          placeholder="Enter your full name"
+        />
+        {fieldErrors.name && (
+          <p className="text-sm text-red-500 mt-1">{fieldErrors.name}</p>
+        )}
+      </div>
 
-      <input name="password" type="password" placeholder="Password" />
-      {fieldErrors.password && <p>{fieldErrors.password}</p>}
+      {/* EMAIL */}
+      <div>
+        <label className="mb-2 block text-xs font-medium text-[#3e2f25]">
+          Email Address
+        </label>
+        <input
+          name="email"
+          type="email"
+          value={formValues.email}
+          onChange={(e) =>
+            setFormValues((prev) => ({ ...prev, email: e.target.value }))
+          }
+          className="block w-full rounded-md border border-[#eadfd3] py-2 px-3 text-sm outline-[#7a5c46] text-stone-900 placeholder:text-gray-400"
+          placeholder="Enter your email"
+        />
+        {fieldErrors.email && (
+          <p className="text-sm text-red-500 mt-1">{fieldErrors.email}</p>
+        )}
+      </div>
 
-      <input name="confirmPassword" type="password" placeholder="Confirm Password" />
-      {fieldErrors.confirmPassword && <p>{fieldErrors.confirmPassword}</p>}
+      {/* PASSWORD */}
+      <div>
+        <label className="mb-2 block text-xs font-medium text-[#3e2f25]">
+          Password
+        </label>
+        <input
+          name="password"
+          type="password"
+          value={formValues.password}
+          onChange={(e) =>
+            setFormValues((prev) => ({ ...prev, password: e.target.value }))
+          }
+          className="block w-full rounded-md border border-[#eadfd3] py-2 px-3 text-sm outline-[#7a5c46] text-stone-900 placeholder:text-gray-400"
+          placeholder="Min. 8 characters"
+        />
+        {fieldErrors.password && (
+          <p className="text-sm text-red-500 mt-1">{fieldErrors.password}</p>
+        )}
+      </div>
 
-      <button type="submit">Sign Up</button>
+      {/* CONFIRM PASSWORD */}
+      <div>
+        <label className="mb-2 block text-xs font-medium text-[#3e2f25]">
+          Confirm Password
+        </label>
+        <input
+          type="password"
+          value={formValues.confirmPassword}
+          onChange={(e) =>
+            setFormValues((prev) => ({ ...prev, confirmPassword: e.target.value }))
+          }
+          className="block w-full rounded-md border border-[#eadfd3] py-2 px-3 text-sm outline-[#7a5c46] text-stone-900 placeholder:text-gray-400"
+          placeholder="Re-enter password"
+        />
+        {fieldErrors.confirmPassword && (
+          <p className="text-sm text-red-500 mt-1">
+            {fieldErrors.confirmPassword}
+          </p>
+        )}
+      </div>
 
-      {/* Error and Success Messages */}      
+      {/* BUTTON */}
+      <SubmitButton />
+
+      {/* SERVER ERROR */}
       {state?.error && (
-        <p className="text-red-600 text-sm">{state.error}</p>
+        <p className="text-sm text-red-500 text-center">{state.error}</p>
       )}
 
-      {state?.success && (
-        <p className="text-green-600 text-sm">
-          Account created successfully! Redirecting...
-        </p>
-      )}
+      {/* LOGIN LINK */}
+      <div className="text-center text-sm text-gray-600 pt-2">
+        Already have an account?{" "}
+        <Link href="/login" className="text-[#4A2C2A] font-bold hover:underline">
+          Log in
+        </Link>
+      </div>
     </form>
   );
 }
