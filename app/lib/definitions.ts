@@ -6,6 +6,11 @@ export type User = {
   created_at: string;
 };
 
+export type SignupState = {
+  success?: boolean;
+  error?: string;
+};
+
 export type Seller = {
   id: string;
   name: string;

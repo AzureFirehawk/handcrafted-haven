@@ -5,7 +5,9 @@ import { AuthError } from 'next-auth';
 import postgres from 'postgres';
 import { revalidatePath } from 'next/cache';
 import { auth } from '@/auth';
- 
+import bcrypt from 'bcrypt';
+import { SignupState } from '@/app/lib/definitions';
+import { Sign } from 'crypto';
 
 const sql = postgres(process.env.POSTGRES_URL!, {
   ssl: "require",
@@ -119,5 +121,37 @@ export async function deleteReview(
   } catch (error) {
     console.error('Delete Review Error:', error);
     return 'Failed to delete review.';
+  }
+}
+
+export async function createUser(
+  prevState: SignupState,
+  formData: FormData
+): Promise<SignupState> {
+  try {
+    const name = formData.get('name') as string;
+    const email = formData.get('email') as string;
+    const passwordRaw = formData.get('password') as string;
+
+    const existingUser = await sql`
+      SELECT id FROM users WHERE email = ${email}
+    `;
+
+    if (existingUser.length > 0) {
+      return { error: 'An account with this email already exists.' };
+    }
+
+    const password = await bcrypt.hash(passwordRaw, 10);
+    
+    await sql`
+      INSERT INTO users (name, email, password)
+      VALUES (${name}, ${email}, ${password})
+    `;
+
+    return { success: true };
+  }
+  catch (error) {
+    console.error('Create User Error:', error);
+    return { error: 'Failed to create user.' };
   }
 }
