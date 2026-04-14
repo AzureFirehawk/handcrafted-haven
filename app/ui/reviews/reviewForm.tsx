@@ -21,6 +21,9 @@ export default function ReviewForm({
   const [title, setTitle] = useState(existingReview?.title || '');
   const [hover, setHover] = useState(0);
 
+  const canSubmit =
+    rating > 0 && title.trim().length > 0;
+
   const hasReview = !!existingReview;
 
   const handleDelete = async () => {
@@ -129,7 +132,12 @@ export default function ReviewForm({
           <div className="flex gap-3">
             <button
               type="submit"
-              className="bg-[#7a5c46] text-white px-6 py-2 rounded-full"
+              disabled={!canSubmit}
+              className={`px-6 py-2 rounded-full transition ${
+                  canSubmit
+                    ? 'bg-[#7a5c46] text-white hover:bg-[#624836]'
+                    : 'bg-gray-300 text-gray-500 cursor-not-allowed'
+                }`}
             >
               Save Review
             </button>

@@ -56,8 +56,12 @@ export async function createReview(
     const title = formData.get('title') as string;
     const comment = formData.get('comment') as string;
 
-    if (!productId || rating < 1 || rating > 5) {
+    if (!productId || rating < 1 || rating > 5 || !title?.trim()) {
       return 'Missing required fields.';
+    }
+
+    if (!title?.trim()) {
+      return 'Title is required.';
     }
 
     await sql`
