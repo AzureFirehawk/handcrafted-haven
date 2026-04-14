@@ -30,7 +30,6 @@ export async function authenticate(
   }
 }
 
-
 export async function createReview(
   prevState: string | undefined,
   formData: FormData
@@ -43,34 +42,78 @@ export async function createReview(
     }
 
     const user = await sql`
-      SELECT * FROM users WHERE email = ${session.user.email}
+      SELECT id FROM users WHERE email = ${session.user.email}
     `;
-    if (user.length === 0) {
+
+    if (!user[0]) {
       return 'User not found.';
     }
 
     const userId = user[0].id;
 
-    const productId = formData.get('product_id') as string;
+    const productId = formData.get('productId') as string;
     const rating = Number(formData.get('rating'));
     const title = formData.get('title') as string;
     const comment = formData.get('comment') as string;
 
-    if (!productId || !rating || !title) {
+    if (!productId || rating < 1 || rating > 5) {
       return 'Missing required fields.';
     }
 
     await sql`
       INSERT INTO reviews (product_id, user_id, rating, title, comment)
       VALUES (${productId}, ${userId}, ${rating}, ${title}, ${comment})
-      ON CONFLICT (product_id, user_id) DO NOTHING
+      ON CONFLICT (product_id, user_id)
+      DO UPDATE SET
+        rating = EXCLUDED.rating,
+        title = EXCLUDED.title,
+        comment = EXCLUDED.comment,
+        created_at = NOW()
     `;
 
     revalidatePath(`/products/${productId}`);
 
-    return 'Review created successfully.';
+    return 'Review saved successfully.';
   } catch (error) {
     console.error('Database Error:', error);
     return 'Something went wrong. Please try again.';
+  }
+}
+
+export async function deleteReview(
+  prevState: string | undefined,
+  formData: FormData
+) {
+  try {
+    const session = await auth();
+
+    if (!session?.user?.email) {
+      return 'You must be logged in.';
+    }
+
+    const productId = formData.get('productId') as string;
+
+    const user = await sql`
+      SELECT id FROM users WHERE email = ${session.user.email}
+    `;
+
+    if (!user[0]) {
+      return 'User not found.';
+    }
+
+    const userId = user[0].id;
+
+    await sql`
+      DELETE FROM reviews
+      WHERE product_id = ${productId}
+      AND user_id = ${userId}
+    `;
+
+    revalidatePath(`/products/${productId}`);
+
+    return 'Review deleted successfully.';
+  } catch (error) {
+    console.error('Delete Review Error:', error);
+    return 'Failed to delete review.';
   }
 }
