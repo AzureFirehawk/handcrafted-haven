@@ -57,9 +57,15 @@ export default function Page() {
       setError("Please fix the highlighted fields before continuing.");
       return;
     }
-
-    localStorage.setItem("mockRole", role);
-
+    localStorage.setItem(
+  "user",
+  JSON.stringify({
+    name,
+    email,
+    password,
+    role,
+  })
+);
     setSuccess("Account created successfully! Redirecting...");
 
     setTimeout(() => {
@@ -68,8 +74,8 @@ export default function Page() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-[#F5EFE6] px-4 py-10">
-      <div className="w-full max-w-md p-8 space-y-6 bg-white rounded-xl shadow-lg border border-[#6F1D1B]/10">
+    <div className="min-h-screen flex items-center justify-center bg-[#EDE0D4] px-4 py-10">
+      <div className="w-full max-w-md p-8 space-y-6 bg-white rounded-xl shadow-lg border border-gray-200">
 
         {/* HEADER */}
         <div className="text-center">
@@ -96,108 +102,73 @@ export default function Page() {
         <form className="space-y-4" onSubmit={handleSubmit} noValidate>
 
           {/* NAME */}
-          <div>
-            <label className="block mb-1 text-sm font-medium text-gray-700">
-              Full Name
-            </label>
-            <input
-              type="text"
-              value={name}
-              onChange={(event) => setName(event.target.value)}
-              placeholder="Enter your name"
-              className={`w-full px-4 py-2.5 rounded-md border bg-[#FAFAFA] focus:outline-none focus:ring-2 focus:ring-[#6F1D1B] transition ${
-                fieldErrors.name ? "border-red-400" : "border-gray-300"
-              }`}
-            />
-            {fieldErrors.name && (
-              <p className="text-sm text-red-600 mt-1">{fieldErrors.name}</p>
-            )}
-          </div>
+          <input
+            type="text"
+            value={name}
+            onChange={(event) => setName(event.target.value)}
+            placeholder="Full Name"
+            className={`w-full px-4 py-2.5 rounded-md border bg-[#FAFAFA] focus:outline-none focus:ring-2 focus:ring-[#D6CCC2] ${
+              fieldErrors.name ? "border-red-400" : "border-gray-300"
+            }`}
+          />
+          {fieldErrors.name && <p className="text-sm text-red-600">{fieldErrors.name}</p>}
 
           {/* EMAIL */}
-          <div>
-            <label className="block mb-1 text-sm font-medium text-gray-700">
-              Email Address
-            </label>
-            <input
-              type="email"
-              value={email}
-              onChange={(event) => setEmail(event.target.value)}
-              placeholder="email@example.com"
-              className={`w-full px-4 py-2.5 rounded-md border bg-[#FAFAFA] focus:outline-none focus:ring-2 focus:ring-[#6F1D1B] transition ${
-                fieldErrors.email ? "border-red-400" : "border-gray-300"
-              }`}
-            />
-            {fieldErrors.email && (
-              <p className="text-sm text-red-600 mt-1">{fieldErrors.email}</p>
-            )}
-          </div>
+          <input
+            type="email"
+            value={email}
+            onChange={(event) => setEmail(event.target.value)}
+            placeholder="Email Address"
+            className={`w-full px-4 py-2.5 rounded-md border bg-[#FAFAFA] focus:outline-none focus:ring-2 focus:ring-[#D6CCC2] ${
+              fieldErrors.email ? "border-red-400" : "border-gray-300"
+            }`}
+          />
+          {fieldErrors.email && <p className="text-sm text-red-600">{fieldErrors.email}</p>}
 
           {/* PASSWORD */}
-          <div>
-            <label className="block mb-1 text-sm font-medium text-gray-700">
-              Password
-            </label>
-            <input
-              type="password"
-              value={password}
-              onChange={(event) => setPassword(event.target.value)}
-              placeholder="••••••••"
-              className={`w-full px-4 py-2.5 rounded-md border bg-[#FAFAFA] focus:outline-none focus:ring-2 focus:ring-[#6F1D1B] transition ${
-                fieldErrors.password ? "border-red-400" : "border-gray-300"
-              }`}
-            />
-            {fieldErrors.password && (
-              <p className="text-sm text-red-600 mt-1">{fieldErrors.password}</p>
-            )}
-          </div>
+          <input
+            type="password"
+            value={password}
+            onChange={(event) => setPassword(event.target.value)}
+            placeholder="Password"
+            className={`w-full px-4 py-2.5 rounded-md border bg-[#FAFAFA] focus:outline-none focus:ring-2 focus:ring-[#D6CCC2] ${
+              fieldErrors.password ? "border-red-400" : "border-gray-300"
+            }`}
+          />
+          {fieldErrors.password && <p className="text-sm text-red-600">{fieldErrors.password}</p>}
 
           {/* CONFIRM PASSWORD */}
-          <div>
-            <label className="block mb-1 text-sm font-medium text-gray-700">
-              Confirm Password
-            </label>
-            <input
-              type="password"
-              value={confirmPassword}
-              onChange={(event) => setConfirmPassword(event.target.value)}
-              placeholder="••••••••"
-              className={`w-full px-4 py-2.5 rounded-md border bg-[#FAFAFA] focus:outline-none focus:ring-2 focus:ring-[#6F1D1B] transition ${
-                fieldErrors.confirmPassword ? "border-red-400" : "border-gray-300"
-              }`}
-            />
-            {fieldErrors.confirmPassword && (
-              <p className="text-sm text-red-600 mt-1">
-                {fieldErrors.confirmPassword}
-              </p>
-            )}
-          </div>
+          <input
+            type="password"
+            value={confirmPassword}
+            onChange={(event) => setConfirmPassword(event.target.value)}
+            placeholder="Confirm Password"
+            className={`w-full px-4 py-2.5 rounded-md border bg-[#FAFAFA] focus:outline-none focus:ring-2 focus:ring-[#D6CCC2] ${
+              fieldErrors.confirmPassword ? "border-red-400" : "border-gray-300"
+            }`}
+          />
+          {fieldErrors.confirmPassword && (
+            <p className="text-sm text-red-600">{fieldErrors.confirmPassword}</p>
+          )}
 
           {/* ROLE */}
-          <div>
-            <label className="block mb-1 text-sm font-medium text-gray-700">
-              Account Type
-            </label>
-            <select
-              value={role}
-              onChange={(event) => setRole(event.target.value)}
-              className={`w-full px-4 py-2.5 rounded-md border bg-[#FAFAFA] focus:outline-none focus:ring-2 focus:ring-[#6F1D1B] transition ${
-                fieldErrors.role ? "border-red-400" : "border-gray-300"
-              }`}
-            >
-              <option value="">Select an option</option>
-              <option value="customer">Customer</option>
-              <option value="seller">Seller</option>
-            </select>
-            {fieldErrors.role && (
-              <p className="text-sm text-red-600 mt-1">{fieldErrors.role}</p>
-            )}
-          </div>
+          <select
+            value={role}
+            onChange={(event) => setRole(event.target.value)}
+            className={`w-full px-4 py-2.5 rounded-md border bg-[#FAFAFA] focus:outline-none focus:ring-2 focus:ring-[#D6CCC2] ${
+              fieldErrors.role ? "border-red-400" : "border-gray-300"
+            }`}
+          >
+            <option value="">Select Account Type</option>
+            <option value="customer">Customer</option>
+            <option value="seller">Seller</option>
+          </select>
+          {fieldErrors.role && <p className="text-sm text-red-600">{fieldErrors.role}</p>}
 
           {/* BUTTON */}
           <button
             type="submit"
-            className="w-full py-3 mt-2 text-white bg-[#6F1D1B] rounded-md hover:bg-[#5a1716] transition-all duration-200 font-semibold shadow-md hover:shadow-lg"
+            className="w-full py-3 mt-2 text-[#4A2C2A] bg-[#D6CCC2] rounded-full hover:bg-[#cbbba9] transition font-semibold shadow-sm"
           >
             Sign Up
           </button>
@@ -207,8 +178,8 @@ export default function Page() {
         <div className="text-center text-sm text-gray-600">
           Already have an account?{" "}
           <Link
-            href="/sign-in"
-            className="text-[#6F1D1B] font-semibold hover:underline"
+            href="/login"
+            className="text-[#4A2C2A] font-semibold hover:underline"
           >
             Sign In
           </Link>

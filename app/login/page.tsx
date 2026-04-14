@@ -48,23 +48,44 @@ export default function Page() {
 
     setIsLoading(true);
 
-    // Simulated login
-    setTimeout(() => {
-      setSuccess("Welcome back! You have successfully signed in.");
-      setIsLoading(false);
+    // ✅ REAL LOGIN CHECK
+    const storedUser = localStorage.getItem("user");
 
-      // Force full reload so navbar updates with "Welcome, Name"
-      setTimeout(() => {
-        window.location.href = "/";
-      }, 1500);
-    }, 1000);
+    if (!storedUser) {
+      setError("No account found. Please sign up first.");
+      setIsLoading(false);
+      return;
+    }
+
+    const user = JSON.parse(storedUser);
+
+    if (email !== user.email) {
+      setError("Email not found.");
+      setIsLoading(false);
+      return;
+    }
+
+    if (password !== user.password) {
+      setError("Incorrect password.");
+      setIsLoading(false);
+      return;
+    }
+
+    // ✅ SUCCESS
+    setSuccess("Welcome back! You have successfully signed in.");
+    setIsLoading(false);
+
+    setTimeout(() => {
+      router.push("/");
+    }, 1500);
   };
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-[70vh] px-4">
-      <div className="w-full max-w-md p-8 space-y-6 bg-white rounded-lg shadow-xl border border-[#6F1D1B]/10">
+    <div className="flex flex-col items-center justify-center min-h-[70vh] px-4 bg-[#EDE0D4]">
+      <div className="w-full max-w-md p-8 space-y-6 bg-white rounded-lg shadow-xl border border-gray-200">
+        
         <div className="text-center">
-          <h2 className="text-3xl font-bold text-[#6F1D1B]">Welcome Back</h2>
+          <h2 className="text-3xl font-bold text-[#4A2C2A]">Welcome Back</h2>
           <p className="text-gray-600 mt-2">
             Please enter your details to sign in
           </p>
@@ -96,7 +117,7 @@ export default function Page() {
               value={email}
               onChange={(event) => setEmail(event.target.value)}
               placeholder="email@example.com"
-              className={`w-full px-4 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-[#6F1D1B] focus:border-transparent transition-all ${
+              className={`w-full px-4 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-[#D6CCC2] focus:border-transparent transition-all ${
                 fieldErrors.email ? "border-red-400" : "border-gray-300"
               }`}
               required
@@ -113,7 +134,7 @@ export default function Page() {
               </label>
               <Link 
                 href="/forgot-password" 
-                className="text-sm text-[#6F1D1B] hover:underline"
+                className="text-sm text-[#4A2C2A] hover:underline"
               >
                 Forgot password?
               </Link>
@@ -124,7 +145,7 @@ export default function Page() {
               value={password}
               onChange={(event) => setPassword(event.target.value)}
               placeholder="••••••••"
-              className={`w-full px-4 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-[#6F1D1B] focus:border-transparent transition-all ${
+              className={`w-full px-4 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-[#D6CCC2] focus:border-transparent transition-all ${
                 fieldErrors.password ? "border-red-400" : "border-gray-300"
               }`}
               required
@@ -139,7 +160,7 @@ export default function Page() {
           <button
             type="submit"
             disabled={isLoading}
-            className="w-full py-3 mt-2 text-white bg-[#6F1D1B] rounded-md hover:bg-[#5a1716] transition-colors font-bold shadow-md disabled:opacity-50 disabled:cursor-not-allowed"
+            className="w-full py-3 mt-2 text-[#4A2C2A] bg-[#D6CCC2] rounded-full hover:bg-[#cbbba9] transition-colors font-bold shadow-md disabled:opacity-50 disabled:cursor-not-allowed"
           >
             {isLoading ? "Signing In..." : "Sign In"}
           </button>
@@ -149,7 +170,7 @@ export default function Page() {
           Don&apos;t have an account?{" "}
           <Link 
             href="/sign-up" 
-            className="text-[#6F1D1B] font-bold hover:underline"
+            className="text-[#4A2C2A] font-bold hover:underline"
           >
             Sign Up
           </Link>
