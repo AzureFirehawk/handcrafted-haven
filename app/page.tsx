@@ -162,7 +162,7 @@ export default async function HomePage() {
           Explore our latest collection and find something truly special.
         </p>
         <a
-          href="#shop"
+          href="products"
           className="mt-8 inline-block rounded-full bg-white px-8 py-3 font-semibold text-[#7a5c46] hover:bg-[#f5ede6] transition"
         >
           Start Shopping
