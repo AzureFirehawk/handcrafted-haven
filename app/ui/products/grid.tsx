@@ -13,25 +13,38 @@ export default function ProductGrid({
 }) {
   const [search, setSearch] = useState("");
   const [sort, setSort] = useState("default");
+  const [category, setCategory] = useState("all");
 
-  const filteredProducts = useMemo(() => {
-    return initialProducts
-      .filter((product) =>
-        product.name.toLowerCase().includes(search.toLowerCase())
-      )
-      .sort((a, b) => {
-        switch (sort) {
-          case "price-low":
-            return a.price - b.price;
-          case "price-high":
-            return b.price - a.price;
-          case "name":
-            return a.name.localeCompare(b.name);
-          default:
-            return 0;
-        }
-      });
-  }, [search, sort, initialProducts]);
+  const categories = useMemo(() => {
+    const unique = new Set(initialProducts.map(p => p.category));
+    return ["all", ...Array.from(unique)];
+  }, [initialProducts]);
+const filteredProducts = useMemo(() => {
+  return initialProducts
+    .filter((product) => {
+      const matchesSearch = product.name
+        .toLowerCase()
+        .includes(search.toLowerCase());
+
+      const matchesCategory =
+        category === "all" || product.category === category;
+
+      return matchesSearch && matchesCategory;
+    })
+    .sort((a, b) => {
+      switch (sort) {
+        case "price-low":
+          return a.price - b.price;
+        case "price-high":
+          return b.price - a.price;
+        case "name":
+          return a.name.localeCompare(b.name);
+        default:
+          return 0;
+      }
+    });
+  }, [search, sort, category, initialProducts]);
+
 
   return (
     <>
@@ -58,6 +71,19 @@ export default function ProductGrid({
           <option value="price-high">Price: High → Low</option>
           <option value="name">Name (A-Z)</option>
         </select>
+
+        {/* Category */}
+        <select
+          className="rounded-full border border-[#d6c6b8] px-5 py-3 bg-white focus:outline-none"
+          value={category}
+          onChange={(e) => setCategory(e.target.value)}
+        >
+          {categories.map((cat) => (
+            <option key={cat} value={cat}>
+              {cat === "all" ? "All Categories" : cat}
+            </option>
+          ))}
+</select>
       </div>
 
       {/* Grid */}

@@ -42,7 +42,7 @@ export type Product = {
   description: string | null;
   price: number;
   image: string | undefined;
-  category: string | null;
+  category: string | undefined;
   seller_id: string;
   created_at: string;
 };
