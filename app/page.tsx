@@ -23,7 +23,7 @@ export default async function HomePage() {
             </p>
             <div className="mt-8 flex flex-wrap gap-4">
               <a
-                href="#shop"
+                href="/products"
                 className="rounded-full bg-[#7a5c46] px-6 py-3 text-white font-medium hover:bg-[#624836] transition"
 >
                 Shop Collection
